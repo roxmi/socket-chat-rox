@@ -12,15 +12,16 @@ var usuario = {
     sala: searchParams.get('sala')
 }
 
-socket.on('connect', function () {
+socket.on('connect', function() {
     console.log('Conectado al servidor');
-    socket.emit('entrarChat', usuario, function (resp) {
-        console.log('Usarios conectados', resp)
+    socket.emit('entrarChat', usuario, function(resp) {
+        renderizarUsuarios(resp);
+        //console.log('Usarios conectados', resp)
     });
 });
 
 // escuchar
-socket.on('disconnect', function () {
+socket.on('disconnect', function() {
 
     console.log('Perdimos conexión con el servidor');
 
@@ -34,16 +35,16 @@ socket.on('disconnect', function () {
 // });
 
 // Escuchar información
-socket.on('crearMensaje', function (mensaje) {
-
-    console.log('Servidor:', mensaje);
-
+socket.on('crearMensaje', function(mensaje) {
+    renderizarMensajes(mensaje, false);
+    scrollBottom();
+    //console.log('Servidor:', mensaje);
 });
 
 // Escuchar cambios de usuarios
 //cuando un usaurio entra o sale del chat
-socket.on('listaPersonas', function (personas) {
-
+socket.on('listaPersonas', function(personas) {
+    renderizarUsuarios(personas);
     console.log('Servidor:', personas);
 
 });
@@ -51,6 +52,6 @@ socket.on('listaPersonas', function (personas) {
 //Mensaje privado
 
 
-socket.on('mensajePrivado', function (mensaje) {
+socket.on('mensajePrivado', function(mensaje) {
     console.log('Mensaje privado: ', mensaje);
 });
